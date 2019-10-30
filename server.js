@@ -6,6 +6,15 @@ const hubsRouter = require('./hubs/hubs-router.js');
 
 const server = express();
 
+function doubler(req, res, next){
+  
+  const number = Number(req.query.number || 0)
+
+  req.doubled = number * 2
+
+  next()
+}
+
 function dateLogger(req, res, next) {
   console.log(new Date().toISOString())
 
@@ -47,13 +56,8 @@ server.use(URLmethod)
 
 server.use('/api/hubs', hubsRouter);
 
-server.get('/', (req, res) => {
-  const nameInsert = (req.name) ? ` ${req.name}` : '';
-
-  res.send(`
-    <h2>Lambda Hubs API</h2>
-    <p>Welcome${nameInsert} to the Lambda Hubs API</p>
-    `);
+server.get('/', doubler, (req, res) => {
+  res.status(200).json({numnber: req.doubled})
 });
 
 module.exports = server;
