@@ -19,12 +19,30 @@ function URLmethod(req, res, next) {
   next()
 }
 
+function gateKeeper(req, res, next) {
+  // data can come in the body, url parameters, query string, headers
+  const password = req.headers.password
+
+  if (!password) {
+    res.status(400).json({message: 'NEED A PASSWORD'})
+  } else {
+    password.toLowerCase() === 'mellon' 
+      ? next() 
+      : res.status(401).json({message: 'You shall not pass'})
+  }
+
+  
+}
+
 server.use(helmet()) // third party middleware
 server.use(express.json());
+server.use(gateKeeper)
 server.use(morgan('dev'))
+
 
 server.use(dateLogger)
 server.use(URLmethod)
+
 
 
 server.use('/api/hubs', hubsRouter);
