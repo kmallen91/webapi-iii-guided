@@ -20,6 +20,7 @@ function URLmethod(req, res, next) {
 server.use(helmet()) // third party middleware
 server.use(express.json());
 server.use(dateLogger)
+server.use(URLmethod)
 
 server.use('/api/hubs', hubsRouter);
 
