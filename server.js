@@ -1,5 +1,7 @@
 const express = require('express'); // importing a CommonJS module
 const helmet = require('helmet')
+const morgan = require('morgan')
+
 const hubsRouter = require('./hubs/hubs-router.js');
 
 const server = express();
@@ -19,8 +21,11 @@ function URLmethod(req, res, next) {
 
 server.use(helmet()) // third party middleware
 server.use(express.json());
+server.use(morgan('dev'))
+
 server.use(dateLogger)
 server.use(URLmethod)
+
 
 server.use('/api/hubs', hubsRouter);
 
